@@ -1,6 +1,5 @@
 # Environments
 .venv/
-runtime/
 env/
 venv/
 
@@ -9,8 +8,8 @@ __pycache__/
 *.pyc
 
 # Local Model Files (users download these)
-modle/*.gguf
-modle/*.bin
+# modle/*.gguf
+# modle/*.bin
 modle/config.json
 
 # VS Code
