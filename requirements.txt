@@ -1,0 +1,4 @@
+PySide6
+llama-cpp-python
+requests
+Pillow
