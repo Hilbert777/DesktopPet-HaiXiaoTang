@@ -111,6 +111,41 @@ class PetUI(QWidget):
         else:
             self.config = {"pet_scale": 1.0, "pet_opacity": 1.0, "model_path": "", "display_mode": "top"}
 
+        # --- 自动路径修复逻辑 ---
+        current_model_path = self.config.get("model_path", "")
+        
+        # 1. 尝试将相对路径转换为绝对路径
+        if current_model_path and not os.path.isabs(current_model_path):
+             current_model_path = os.path.join(self.app_root, current_model_path)
+
+        # 2. 如果路径不存在或为空，尝试在默认目录(app_root/modle)下自动搜索 .gguf 文件
+        if not current_model_path or not os.path.exists(current_model_path):
+            default_model_dir = os.path.join(self.app_root, "modle")
+            if os.path.exists(default_model_dir):
+                for file in os.listdir(default_model_dir):
+                    if file.endswith(".gguf"):
+                        # 找到第一个 gguf 文件作为默认模型
+                        found_path = os.path.join(default_model_dir, file)
+                        print(f"Auto-detected model: {found_path}")
+                        current_model_path = found_path
+                        # 更新配置(内存中更新)
+                        self.config["model_path"] = current_model_path
+                        # 同时保存一次配置，确保持久化修正
+                        self.save_config() 
+                        break
+        
+        # 确保传给 LLMClient 的是更新后的绝对路径
+        if current_model_path:
+             self.config["model_path"] = os.path.normpath(current_model_path)
+             
+    def save_config(self):
+        """保存当前配置到文件"""
+        try:
+            with open(self.config_path, "w", encoding="utf-8") as f:
+                json.dump(self.config, f, indent=4)
+        except Exception as e:
+            print(f"Error saving config: {e}")
+
     def init_llm(self):
         print("Loading LLM...")
         if self.llm_client.load_model():
@@ -344,7 +379,7 @@ class PetUI(QWidget):
     def update_idle_animation(self):
          """更新待机动作 (1-8.png)"""
          # 定义待机动作列表
-         idle_images = [f"{i}.png" for i in range(1, 9)] + ["10.gif"]
+         idle_images = [f"{i}.png" for i in range(1, 8)]
          
          # 随机选择一个
          selected_img = random.choice(idle_images)
