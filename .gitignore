@@ -2,14 +2,15 @@
 .venv/
 env/
 venv/
+runtime/
 
 # Python cache
 __pycache__/
 *.pyc
 
 # Local Model Files (users download these)
-# modle/*.gguf
-# modle/*.bin
+modle/*.gguf
+modle/*.bin
 modle/config.json
 
 # VS Code

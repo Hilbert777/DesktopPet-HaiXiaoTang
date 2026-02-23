@@ -21,7 +21,12 @@ if %errorlevel% neq 0 (
     echo - 目录权限不足
 ) else (
     echo.
-    echo [成功] 环境已就绪。现在可以直接运行 Start_Pet.bat 了。
+    echo [成功] 环境已就绪。
+    echo.
+    echo 接下来，你可以运行 download_model.bat 来下载大模型。
+    echo 或者直接将模型文件放入 modle/ 文件夹中。
+    echo.
+    echo 之后即可运行 Start_Pet.bat 来启动程序。
 )
 
 echo.
